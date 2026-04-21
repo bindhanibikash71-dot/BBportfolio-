@@ -226,8 +226,15 @@
   appId: "1:421133801605:web:64a97431819636cd81f1ec"
 };
 
-        // 🔐 SECURITY: ONLY YOUR EMAIL CAN LOGIN
-        const ADMIN_EMAILS = ["your-email@gmail.com"]; 
+        // 🔐 SECURITY: IN SABHI 6 EMAILS SE ADMIN PANEL OPEN HOGA
+        const ADMIN_EMAILS = [
+            "bindhanibikash71@gmail.com",
+            "bindhanibikash599@gmail.com",
+            "myfood.food.beverage@gmail.com",
+            "bindhanib958@gmail.com",
+            "bikashworm@gmail.com",
+            "bbindhani149@gmail.com"
+        ]; 
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -235,7 +242,7 @@
 
         let projectsData = [];
 
-        // Auth
+        // Auth Logic
         document.getElementById('btn-login').onclick = () => {
             document.getElementById('btn-login').innerHTML = "Authenticating...";
             signInWithPopup(auth, new GoogleAuthProvider()).catch(err => {
@@ -243,6 +250,7 @@
                 document.getElementById('btn-login').innerHTML = "<i class='fa-brands fa-google'></i> Continue with Google";
             });
         };
+        
         document.getElementById('btn-logout').onclick = () => signOut(auth);
 
         onAuthStateChanged(auth, (user) => {
@@ -261,7 +269,7 @@
             }
         });
 
-        // Navigation
+        // Navigation Menu
         document.querySelectorAll('.nav-item').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
@@ -272,6 +280,7 @@
             });
         });
 
+        // Data Loading
         async function loadData() {
             const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
             const snaps = await getDocs(q);
@@ -290,6 +299,7 @@
             renderTable();
         }
 
+        // Render Table
         window.renderTable = function() {
             const tbody = document.getElementById('table-body');
             const search = (document.getElementById('search-manage')?.value || "").toLowerCase();
@@ -313,10 +323,12 @@
             });
         }
 
+        // Select All Checkbox
         document.getElementById('selectAll').onchange = (e) => {
             document.querySelectorAll('.chk-delete').forEach(c => c.checked = e.target.checked);
         };
 
+        // Edit Project
         window.editProject = function(id) {
             const p = projectsData.find(x => x.id === id);
             document.getElementById('f_id').value = p.id;
@@ -335,6 +347,7 @@
             document.getElementById('page-title').innerText = "Edit Project";
         }
 
+        // Reset Form
         window.resetForm = function() {
             document.getElementById('f_id').value = "";
             document.getElementById('f_title').value = "";
@@ -350,6 +363,7 @@
             document.getElementById('page-title').innerText = "Create New Project";
         }
 
+        // Save Project
         document.getElementById('btn-save').onclick = async () => {
             const title = document.getElementById('f_title').value;
             if(!title) return alert("Title is required!");
@@ -381,6 +395,7 @@
             loadData();
         };
 
+        // Delete Single Project
         window.deleteProject = async function(id) {
             if(confirm("Are you sure you want to delete this project? This action cannot be undone.")) {
                 await deleteDoc(doc(db, "projects", id));
@@ -388,6 +403,7 @@
             }
         }
 
+        // Bulk Delete
         document.getElementById('btn-bulk-delete').onclick = async () => {
             const chks = document.querySelectorAll('.chk-delete:checked');
             if(chks.length === 0) return alert("Select at least one project.");
@@ -399,6 +415,7 @@
             }
         }
 
+        // JSON Export Backup
         document.getElementById('btn-export').onclick = () => {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectsData));
             const a = document.createElement('a'); a.href = dataStr; a.download = "portfolio_backup.json"; a.click();
