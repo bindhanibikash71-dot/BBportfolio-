@@ -95,9 +95,7 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 40px; margin-top: 40px; }
         
         /* 3D Glass Card */
-        .project-card {
-            padding: 20px; transition: transform 0.3s; transform-style: preserve-3d;
-        }
+        .project-card { padding: 20px; transition: transform 0.3s; transform-style: preserve-3d; position: relative; }
         .project-card:hover { border-color: var(--primary); box-shadow: var(--glow); }
         .project-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; transform: translateZ(30px); }
         .project-card h3 { font-size: 1.5rem; margin-bottom: 10px; transform: translateZ(20px); }
@@ -124,7 +122,7 @@
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; }
         .modal-content { width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; padding: 40px; }
-        .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 24px; }
+        .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
 
         /* Loader */
         #loader { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
@@ -192,7 +190,7 @@
                 <div class="timeline-dot"></div>
                 <div class="timeline-date">2021 - 2023</div>
                 <h3>Freelance Web Engineer</h3>
-                <p style="color: var(--text-muted); margin-top:10px;">Delivered 30+ projects for international clients using React, Node, and Firebase.</p>
+                <p style="color: var(--text-muted); margin-top:10px;">Delivered multiple projects for clients using React, Node, and Firebase.</p>
             </div>
         </div>
     </section>
@@ -210,7 +208,7 @@
         </div>
 
         <div class="grid" id="projects-grid">
-            <!-- Data from Firebase -->
+            <!-- Data from Firebase injected here -->
         </div>
     </section>
 
@@ -259,16 +257,11 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, updateDoc, increment, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ⚠️ REPLACE THIS WITH YOUR REAL CONFIG ⚠️
-        const firebaseConfig = {
-  apiKey: "AIzaSyAlp_s_s1zauH6YxftBpijoAWn01UV_Hws",
-  authDomain: "portfolio-ff8bc.firebaseapp.com",
-  databaseURL: "https://portfolio-ff8bc-default-rtdb.firebaseio.com",
-  projectId: "portfolio-ff8bc",
-  storageBucket: "portfolio-ff8bc.firebasestorage.app",
-  messagingSenderId: "421133801605",
-  appId: "1:421133801605:web:64a97431819636cd81f1ec"
-};
+        /* ========================================================
+           ⚠️ REPLACE THIS WITH YOUR REAL FIREBASE CONFIG ⚠️
+        ======================================================== */
+        
+
         let db = null;
         try {
             const app = initializeApp(firebaseConfig);
@@ -278,7 +271,7 @@
         window.projectsData = [];
         let currentFilter = 'all';
 
-        // Loader Timer
+        // 2-Second Strict Loader Timer
         setTimeout(() => {
             const loader = document.getElementById('loader');
             loader.style.opacity = '0';
@@ -301,7 +294,16 @@
                 const q = query(collection(db, "projects"), where("isPublished", "==", true), orderBy("createdAt", "desc"));
                 const snaps = await getDocs(q);
                 let projects = [];
-                snaps.forEach((doc) => projects.push({ id: doc.id, ...doc.data() }));
+                snaps.forEach((doc) => projects.push({ id: doc.id, ...doc.data() }))const firebaseConfig = {
+  const firebaseConfig = {
+  apiKey: "AIzaSyAlp_s_s1zauH6YxftBpijoAWn01UV_Hws",
+  authDomain: "portfolio-ff8bc.firebaseapp.com",
+  databaseURL: "https://portfolio-ff8bc-default-rtdb.firebaseio.com",
+  projectId: "portfolio-ff8bc",
+  storageBucket: "portfolio-ff8bc.firebasestorage.app",
+  messagingSenderId: "421133801605",
+  appId: "1:421133801605:web:64a97431819636cd81f1ec"
+};
                 
                 window.projectsData = projects;
                 localStorage.setItem('elite_projects', JSON.stringify(projects));
@@ -324,7 +326,7 @@
                 const isSaved = (JSON.parse(localStorage.getItem('elite_saved') || '[]')).includes(p.id);
                 const card = document.createElement('div');
                 card.className = 'glass project-card';
-                // 3D Hover tilt effect JS logic
+                // 3D Tilt Effect
                 card.onmousemove = (e) => {
                     const rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left; const y = e.clientY - rect.top;
@@ -378,7 +380,7 @@
 
         loadProjects();
 
-        // EmailJS
+        // EmailJS Implementation
         window.sendEmail = function(e) {
             e.preventDefault();
             const btn = document.getElementById('c_btn');
@@ -421,7 +423,7 @@
             document.getElementById("scroll-progress").style.width = (w / h) * 100 + "%";
         };
 
-        // Scroll Reveal Animation (Intersection Observer)
+        // Scroll Reveal Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
         }, { threshold: 0.1 });
