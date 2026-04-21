@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bikash Bindhani | Elite Portfolio</title>
+    
+    <!-- Modern Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: rgba(20, 20, 25, 0.6);
+            --primary: #00f0ff;
+            --secondary: #7000ff;
+            --text: #f0f0f0;
+            --text-muted: #999;
+            --border: rgba(255, 255, 255, 0.08);
+            --glow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .brand { font-family: 'Outfit', sans-serif; }
+
+        /* Animated Background Gradient */
+        .bg-glow {
+            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(112, 0, 255, 0.1) 0%, rgba(0, 240, 255, 0.05) 25%, transparent 50%);
+            animation: rotateBg 20s linear infinite; z-index: -1;
+        }
+        @keyframes rotateBg { 100% { transform: rotate(360deg); } }
+
+        /* Custom Cursor */
+        .cursor-dot { width: 8px; height: 8px; background: var(--primary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: transform 0.2s; box-shadow: var(--glow); }
+        .cursor-ring { width: 40px; height: 40px; border: 2px solid var(--secondary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
+        
+        /* Scroll Progress */
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--secondary), var(--primary)); width: 0%; z-index: 9999; }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+        }
+
+        /* Nav */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); background: rgba(5,5,5,0.8); backdrop-filter: blur(10px); }
+        .brand { font-size: 24px; font-weight: 900; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; color: transparent; letter-spacing: 2px;}
+        
+        /* Buttons */
+        .btn {
+            background: transparent; color: var(--text); border: 1px solid var(--border);
+            padding: 12px 25px; border-radius: 30px; font-family: 'Outfit'; font-weight: 600;
+            transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
+        .btn:hover::before { left: 100%; }
+        .btn.primary { background: linear-gradient(45deg, var(--secondary), var(--primary)); border: none; color: #000; box-shadow: var(--glow); }
+        .btn.primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,240,255,0.4); }
+
+        /* Layout */
+        section { padding: 100px 5%; max-width: 1400px; margin: auto; }
+        
+        /* Hero */
+        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-size: 5rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+        .hero h1 span { color: transparent; -webkit-text-stroke: 1px var(--primary); }
+        .hero p { font-size: 1.5rem; color: var(--text-muted); margin-bottom: 40px; }
+        .typing-text { color: var(--primary); font-weight: 700; }
+        .typing-cursor { display: inline-block; width: 3px; background: var(--primary); animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Infinite Marquee */
+        .marquee { width: 100%; overflow: hidden; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+        .marquee-content { display: flex; width: max-content; animation: scroll 20s linear infinite; }
+        .marquee span { font-size: 2rem; font-family: 'Outfit'; font-weight: 900; color: var(--border); margin: 0 40px; text-transform: uppercase; }
+        @keyframes scroll { to { transform: translateX(-50%); } }
+
+        /* Projects Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 40px; margin-top: 40px; }
+        
+        /* 3D Glass Card */
+        .project-card {
+            padding: 20px; transition: transform 0.3s; transform-style: preserve-3d;
+        }
+        .project-card:hover { border-color: var(--primary); box-shadow: var(--glow); }
+        .project-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; transform: translateZ(30px); }
+        .project-card h3 { font-size: 1.5rem; margin-bottom: 10px; transform: translateZ(20px); }
+        .project-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; transform: translateZ(10px); }
+        .badges { display: flex; gap: 8px; flex-wrap: wrap; transform: translateZ(20px); }
+        .badge { background: rgba(0, 240, 255, 0.1); color: var(--primary); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,240,255,0.2); }
+        
+        /* Timeline */
+        .timeline { position: relative; max-width: 800px; margin: 40px auto; }
+        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; width: 2px; height: 100%; background: var(--border); }
+        .timeline-item { position: relative; padding-left: 60px; margin-bottom: 40px; }
+        .timeline-dot { position: absolute; left: 11px; top: 5px; width: 20px; height: 20px; background: var(--bg); border: 4px solid var(--primary); border-radius: 50%; box-shadow: var(--glow); }
+        .timeline-date { font-family: 'Outfit'; color: var(--secondary); font-weight: 700; margin-bottom: 5px; }
+
+        /* Form */
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-group input, .input-group textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 15px 20px; color: white; border-radius: 12px; font-family: 'Inter'; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--primary); box-shadow: inset 0 0 10px rgba(0,240,255,0.1); }
+
+        /* Scroll Animations */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; padding: 40px; }
+        .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 24px; }
+
+        /* Loader */
+        #loader { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
+        .loader-ring { width: 60px; height: 60px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 3000; }
+        .toast { padding: 15px 25px; border-radius: 10px; margin-top: 10px; animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; font-weight: 600; border-left: 4px solid; }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-ring"></div>
+        <h3 style="margin-top:20px; color: var(--primary); letter-spacing: 3px;">INITIALIZING...</h3>
+    </div>
+
+    <!-- UI Elements -->
+    <div class="bg-glow"></div>
+    <div id="scroll-progress"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+    <div id="toast-container"></div>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="brand">BB_PORTFOLIO</div>
+        <div>
+            <button class="btn primary" onclick="document.getElementById('contact').scrollIntoView()">Hire Me</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero reveal">
+        <h1>BIKASH <span>BINDHANI</span></h1>
+        <p>I am a <span class="typing-text" id="typewriter"></span><span class="typing-cursor">&nbsp;</span></p>
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <button class="btn primary" onclick="document.getElementById('portfolio').scrollIntoView()">Explore Work</button>
+            <a href="#" class="btn"><i class="fa-brands fa-github"></i> Github</a>
+        </div>
+    </header>
+
+    <!-- Marquee Banner -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span>REACTJS</span><span>NODEJS</span><span>FIREBASE</span><span>MONGODB</span>
+            <span>NEXTJS</span><span>TYPESCRIPT</span><span>UI/UX</span>
+            <span>REACTJS</span><span>NODEJS</span><span>FIREBASE</span><span>MONGODB</span>
+        </div>
+    </div>
+
+    <!-- Experience Timeline -->
+    <section id="experience" class="reveal">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 50px;">MY <span style="color:var(--primary)">JOURNEY</span></h2>
+        <div class="timeline">
+            <div class="timeline-item glass">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2023 - Present</div>
+                <h3>Senior Full Stack Developer</h3>
+                <p style="color: var(--text-muted); margin-top:10px;">Architecting scalable web applications and leading frontend teams to deliver premium digital experiences.</p>
+            </div>
+            <div class="timeline-item glass">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2021 - 2023</div>
+                <h3>Freelance Web Engineer</h3>
+                <p style="color: var(--text-muted); margin-top:10px;">Delivered 30+ projects for international clients using React, Node, and Firebase.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="reveal">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 20px;">FEATURED <span style="color:var(--secondary)">WORK</span></h2>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap;">
+            <input type="text" id="search-input" class="glass" placeholder="Search projects..." style="padding: 12px 20px; border:1px solid var(--border); color:white; outline:none; border-radius:30px; width: 300px;" onkeyup="debounceSearch()">
+            <button class="btn active filter-btn" data-cat="all">ALL</button>
+            <button class="btn filter-btn" data-cat="web">WEB</button>
+            <button class="btn filter-btn" data-cat="app">APP</button>
+            <button class="btn" onclick="showBookmarks()"><i class="fa-solid fa-bookmark"></i> SAVED</button>
+        </div>
+
+        <div class="grid" id="projects-grid">
+            <!-- Data from Firebase -->
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="reveal">
+        <div class="glass" style="max-width: 600px; margin: auto; padding: 50px;">
+            <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 30px;">LET'S <span style="color:var(--primary)">CONNECT</span></h2>
+            <form id="contact-form" onsubmit="sendEmail(event)">
+                <div class="input-group">
+                    <input type="text" id="c_name" placeholder="Your Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="c_email" placeholder="Your Email" required>
+                </div>
+                <div class="input-group">
+                    <textarea id="c_msg" rows="4" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" class="btn primary" id="c_btn" style="width: 100%;">SEND MESSAGE</button>
+            </form>
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 30px; border-top: 1px solid var(--border); margin-top: 50px;">
+        <p style="color: var(--text-muted);">© 2025 Bikash Bindhani. Engineered for excellence.</p>
+    </footer>
+
+    <!-- Project Modal -->
+    <div class="modal" id="project-modal">
+        <div class="modal-content glass">
+            <button class="close-modal" onclick="closeModal('project-modal')"><i class="fa-solid fa-xmark"></i></button>
+            <h1 id="m_title" style="font-size: 2.5rem; color:var(--primary);">Title</h1>
+            <div class="badges" id="m_tech" style="margin: 15px 0;"></div>
+            <img id="m_img" src="" style="width:100%; height:400px; object-fit:cover; border-radius:15px; margin:20px 0; border: 1px solid var(--border);">
+            <div id="m_desc" style="margin-bottom: 30px; line-height: 1.8; color: var(--text-muted);"></div>
+            
+            <div style="display:flex; gap:15px; margin-bottom: 30px;">
+                <a id="m_live" href="#" target="_blank" class="btn primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+                <a id="m_git" href="#" target="_blank" class="btn"><i class="fa-brands fa-github"></i> Source Code</a>
+                <button class="btn" id="m_like_btn"><i class="fa-solid fa-heart" style="color:#ff3366"></i> <span id="m_likes">0</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, increment, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ⚠️ REPLACE THIS WITH YOUR REAL CONFIG ⚠️
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        let db = null;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+        } catch (e) { console.warn("Firebase not configured."); }
+
+        window.projectsData = [];
+        let currentFilter = 'all';
+
+        // Loader Timer
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 500);
+            
+            if (window.projectsData.length === 0) {
+                const cached = localStorage.getItem('elite_projects');
+                if (cached) {
+                    window.projectsData = JSON.parse(cached);
+                    renderProjects();
+                } else {
+                    document.getElementById('projects-grid').innerHTML = "<p style='color:var(--text-muted); text-align:center; grid-column:1/-1;'>No data found. Setup Firebase first.</p>";
+                }
+            }
+        }, 2000);
+
+        async function loadProjects() {
+            if (!db) return;
+            try {
+                const q = query(collection(db, "projects"), where("isPublished", "==", true), orderBy("createdAt", "desc"));
+                const snaps = await getDocs(q);
+                let projects = [];
+                snaps.forEach((doc) => projects.push({ id: doc.id, ...doc.data() }));
+                
+                window.projectsData = projects;
+                localStorage.setItem('elite_projects', JSON.stringify(projects));
+                renderProjects();
+            } catch (error) { console.error("DB Error"); }
+        }
+
+        window.renderProjects = function(searchQuery = "") {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = "";
+            let filtered = window.projectsData.filter(p => {
+                const matchCat = currentFilter === 'all' || p.category === currentFilter;
+                const matchSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchSearch;
+            });
+
+            if(filtered.length === 0) grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No projects match your criteria.</p>";
+
+            filtered.forEach(p => {
+                const isSaved = (JSON.parse(localStorage.getItem('elite_saved') || '[]')).includes(p.id);
+                const card = document.createElement('div');
+                card.className = 'glass project-card';
+                // 3D Hover tilt effect JS logic
+                card.onmousemove = (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const xPct = x / rect.width - 0.5; const yPct = y / rect.height - 0.5;
+                    card.style.transform = `perspective(1000px) rotateY(${xPct * 20}deg) rotateX(${yPct * -20}deg) scale3d(1.02, 1.02, 1.02)`;
+                };
+                card.onmouseleave = () => card.style.transform = `perspective(1000px) rotateY(0) rotateX(0) scale3d(1,1,1)`;
+                
+                card.innerHTML = `
+                    <button style="position:absolute; top:30px; right:30px; z-index:10; background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(5px);" onclick="toggleSave('${p.id}', event)">
+                        <i class="${isSaved ? 'fa-solid' : 'fa-regular'} fa-bookmark" style="color: ${isSaved ? 'var(--primary)' : 'white'}; font-size:16px;"></i>
+                    </button>
+                    <img src="${p.imageUrl || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80'}" alt="${p.title}" loading="lazy">
+                    <h3>${p.title}</h3>
+                    <p>${(p.description || '').substring(0,80)}...</p>
+                    <div class="badges">${(p.techStack||[]).slice(0,3).map(t => `<span class="badge">${t}</span>`).join('')}</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px solid var(--border); padding-top:15px; color:var(--text-muted); font-size:0.9rem;">
+                        <span><i class="fa-solid fa-eye"></i> ${p.views || 0}</span>
+                        <span><i class="fa-solid fa-heart" style="color:#ff3366"></i> ${p.likes || 0}</span>
+                    </div>
+                `;
+                card.addEventListener('click', (e) => { if(!e.target.closest('button')) openProjectModal(p); });
+                grid.appendChild(card);
+            });
+        }
+
+        window.openProjectModal = async function(project) {
+            document.getElementById('m_title').innerText = project.title;
+            document.getElementById('m_img').src = project.imageUrl || '';
+            document.getElementById('m_desc').innerHTML = project.fullDescription || project.description;
+            document.getElementById('m_live').href = project.projectUrl || '#';
+            document.getElementById('m_git').href = project.githubUrl || '#';
+            document.getElementById('m_likes').innerText = project.likes || 0;
+            document.getElementById('m_tech').innerHTML = (project.techStack||[]).map(t => `<span class="badge">${t}</span>`).join('');
+            document.getElementById('project-modal').style.display = 'flex';
+
+            if(db) { try { await updateDoc(doc(db, "projects", project.id), { views: increment(1) }); } catch(e){} }
+            
+            document.getElementById('m_like_btn').onclick = async () => {
+                if(localStorage.getItem(`liked_${project.id}`)) return showToast("Already liked!", "error");
+                if(db) {
+                    try {
+                        await updateDoc(doc(db, "projects", project.id), { likes: increment(1) });
+                        localStorage.setItem(`liked_${project.id}`, 'true');
+                        document.getElementById('m_likes').innerText = parseInt(document.getElementById('m_likes').innerText) + 1;
+                        showToast("Thanks for the love! ❤️", "success");
+                    } catch(e){}
+                }
+            };
+        }
+
+        loadProjects();
+
+        // EmailJS
+        window.sendEmail = function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('c_btn');
+            btn.innerText = "SENDING...";
+            try {
+                emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                    from_name: document.getElementById('c_name').value,
+                    reply_to: document.getElementById('c_email').value,
+                    message: document.getElementById('c_msg').value,
+                }).then(() => {
+                    showToast("Message Sent Successfully!", "success");
+                    e.target.reset();
+                    btn.innerText = "SEND MESSAGE";
+                });
+            } catch(err) { showToast("Email system not configured.", "error"); btn.innerText = "SEND MESSAGE"; }
+        }
+    </script>
+
+    <script>
+        // Custom Cursor Logic
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        document.addEventListener('mousemove', e => {
+            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+            setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 50);
+        });
+        document.addEventListener('mousedown', () => { ring.style.width = '30px'; ring.style.height = '30px'; dot.style.transform = 'translate(-50%, -50%) scale(1.5)'; });
+        document.addEventListener('mouseup', () => { ring.style.width = '40px'; ring.style.height = '40px'; dot.style.transform = 'translate(-50%, -50%) scale(1)'; });
+
+        // Hover effect for buttons/links
+        document.querySelectorAll('a, button, .project-card').forEach(el => {
+            el.addEventListener('mouseenter', () => { ring.style.borderColor = 'var(--primary)'; ring.style.width = '50px'; ring.style.height = '50px'; });
+            el.addEventListener('mouseleave', () => { ring.style.borderColor = 'var(--secondary)'; ring.style.width = '40px'; ring.style.height = '40px'; });
+        });
+
+        // Scroll Progress
+        window.onscroll = () => {
+            const w = document.body.scrollTop || document.documentElement.scrollTop;
+            const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("scroll-progress").style.width = (w / h) * 100 + "%";
+        };
+
+        // Scroll Reveal Animation (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Typewriter Effect
+        const roles = ["Full Stack Developer", "UI/UX Designer", "Freelancer"];
+        let roleIndex = 0, charIndex = 0, isDeleting = false;
+        function typeWriter() {
+            const el = document.getElementById('typewriter');
+            const currentRole = roles[roleIndex];
+            if(isDeleting) { el.innerText = currentRole.substring(0, charIndex - 1); charIndex--; }
+            else { el.innerText = currentRole.substring(0, charIndex + 1); charIndex++; }
+            
+            let speed = isDeleting ? 50 : 100;
+            if(!isDeleting && charIndex === currentRole.length) { speed = 2000; isDeleting = true; }
+            else if(isDeleting && charIndex === 0) { isDeleting = false; roleIndex = (roleIndex + 1) % roles.length; speed = 500; }
+            setTimeout(typeWriter, speed);
+        }
+        typeWriter();
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.getAttribute('data-cat');
+                window.renderProjects();
+            });
+        });
+
+        let timeout = null;
+        function debounceSearch() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => window.renderProjects(document.getElementById('search-input').value), 300);
+        }
+
+        function toggleSave(id, e) {
+            e.stopPropagation();
+            let saved = JSON.parse(localStorage.getItem('elite_saved') || '[]');
+            if(saved.includes(id)) { saved = saved.filter(i => i !== id); showToast("Removed from Bookmarks"); } 
+            else { saved.push(id); showToast("Saved to Bookmarks", "success"); }
+            localStorage.setItem('elite_saved', JSON.stringify(saved));
+            window.renderProjects(document.getElementById('search-input').value);
+        }
+        function showBookmarks() { currentFilter = 'saved'; window.renderProjects(); }
+
+        function showToast(msg, type='success') {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className = 'glass toast';
+            t.style.borderLeftColor = type === 'success' ? '#00f0ff' : '#ff3366';
+            t.innerHTML = msg;
+            container.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
